@@ -57,7 +57,7 @@ public class MvnSnippetSearchAgent extends SnippetSearchAgent {
      * @return agent id
      */
     public String getId() {
-        return "mvs";
+        return "msr";
     }
 
     /**
@@ -66,7 +66,7 @@ public class MvnSnippetSearchAgent extends SnippetSearchAgent {
      * @return brief text about the source from where the results were found
      */
     public String getDisplayName() {
-        return "mvnsearch snippet repository";
+        return "Mvnsearch Snippet Repository";
     }
 
     /**
@@ -84,7 +84,7 @@ public class MvnSnippetSearchAgent extends SnippetSearchAgent {
      * @return agent description
      */
     public String getDescription() {
-        return "mvnsearch snippet repository";
+        return "Mvnsearch Snippet Repository, and please visit http://snippet.mvnsearch.org for more.";
     }
 
     /**
