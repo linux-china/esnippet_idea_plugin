@@ -3,6 +3,7 @@ package org.mvnsearch.snippet.plugin.actions;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.util.IconLoader;
 import org.mvnsearch.snippet.Snippet;
 import org.mvnsearch.snippet.SnippetSearchAgent;
 import org.mvnsearch.snippet.SnippetSearchAgentsFactory;
@@ -46,6 +47,7 @@ public class SearchPanelForm {
      * construct search panel form
      */
     public SearchPanelForm() {
+        goButton.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/search.png"));
         resultsTree.setModel(new DefaultTreeModel(rootNode));
         final ActionManager actionManager = ActionManager.getInstance();
         final DefaultActionGroup actionGroup = (DefaultActionGroup) actionManager.getAction("eSnippet.ToolGroup");
