@@ -1,0 +1,49 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin>
+    <name>eSnippet Pro plugin</name>
+    <description>Make it to access code snippet repository easy</description>
+    <version>1.0</version>
+    <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
+            logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
+    </vendor>
+    <idea-version since-build="8000"/>
+
+    <actions>
+        <action id="InsertSnippetFragmentAction"
+                class="org.mvnsearch.snippet.plugin.actions.InsertSnippetFragmentAction"
+                text="Insert snippet fragment" description="insert snipet fragment in editor"
+                icon="/org/mvnsearch/snippet/plugin/icons/insert_snippet.png">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+        <action id="CreateSnippetFileAction" class="org.mvnsearch.snippet.plugin.actions.CreateSnippetFileAction"
+                text="create file from snippet" description="Create file from snippet"
+                icon="/org/mvnsearch/snippet/plugin/icons/add_file.png">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+        <group id="eSnippet.ToolGroup">
+            <action id="eSnippet.About" class="org.mvnsearch.snippet.plugin.actions.AboutAction"
+                    icon="/actions/help.png" text="About eSnippet"/>
+            <action id="eSnippet.NextCodeSnippet" class="org.mvnsearch.snippet.plugin.actions.NextCodeSnippetAction"
+                    icon="/actions/nextfile.png" text="Next Code Snippet"/>
+            <action id="eSnippet.PreviousCodeSnippet" class="org.mvnsearch.snippet.plugin.actions.PreviousCodeSnippetAction"
+                    icon="/actions/prevfile.png" text="Previous Code Snippet"/>
+            <action id="eSnippet.Paste" class="org.mvnsearch.snippet.plugin.actions.PasteAction"
+                    icon="/actions/menu-paste.png" text="Insert into Active Editor"/>
+            <action id="eSnippet.openInBrowser" class="org.mvnsearch.snippet.plugin.actions.OpenSnippetInBrowserAction"
+                    icon="/general/web.png" text="Open snippet detail in browser"/>
+            <action id="eSnippet.edit" class="org.mvnsearch.snippet.plugin.actions.EditSnippetAction"
+                    icon="/actions/editSource.png" text="Edit snippet"/>
+        </group>
+    </actions>
+    <application-components>
+        <component>
+            <implementation-class>org.mvnsearch.snippet.plugin.SnippetAppComponent</implementation-class>
+        </component>
+    </application-components>
+    <project-components>
+        <component>
+            <implementation-class>org.mvnsearch.snippet.plugin.SnippetProjectComponent</implementation-class>
+        </component>
+    </project-components>
+</idea-plugin>
