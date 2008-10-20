@@ -19,7 +19,7 @@ import javax.swing.*;
  *
  * @author linux_china@hotmail.com
  */
-public class SnippetAppComponent implements ApplicationComponent, Configurable, JDOMExternalizable {
+public class SnippetAppComponent implements ApplicationComponent {
     private SnippetService snippetService;
     public String serviceUrl;  //service url
     public String userName;    //user name
@@ -78,93 +78,4 @@ public class SnippetAppComponent implements ApplicationComponent, Configurable, 
         return "SnippetAppComponent";
     }
 
-    /**
-     * get display name
-     *
-     * @return display name
-     */
-    public String getDisplayName() {
-        return "Snippet Repository";
-    }
-
-    /**
-     * get icon for configuration
-     *
-     * @return icon
-     */
-    public Icon getIcon() {
-        return IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/repository.png");
-    }
-
-    /**
-     * get help topic id
-     *
-     * @return help topic id
-     */
-    public String getHelpTopic() {
-        return null;
-    }
-
-    /**
-     * get repository configuration form panel
-     *
-     * @return form panel
-     */
-    public JComponent createComponent() {
-        if (StringUtil.isEmpty(serviceUrl)) {
-            serviceUrl = "http://snippet.mvnsearch.org/remoting/snippetService";
-        }
-        form.fillInfo(serviceUrl, userName);
-        return form.getRootPanel();
-    }
-
-    /**
-     * get modified mark
-     *
-     * @return modified mark
-     */
-    public boolean isModified() {
-        return true;
-    }
-
-    /**
-     * apply setting
-     *
-     * @throws ConfigurationException exception
-     */
-    public void apply() throws ConfigurationException {
-        this.serviceUrl = form.getServiceUrl();
-        this.userName = form.getUserName();
-    }
-
-    /**
-     * reset logic
-     */
-    public void reset() {
-
-    }
-
-    public void disposeUIResources() {
-
-    }
-
-    /**
-     * reader external configuration
-     *
-     * @param element element
-     * @throws InvalidDataException exception
-     */
-    public void readExternal(Element element) throws InvalidDataException {
-        DefaultJDOMExternalizer.readExternal(this, element);
-    }
-
-    /**
-     * writer exteranl configuration
-     *
-     * @param element element
-     * @throws WriteExternalException exception
-     */
-    public void writeExternal(Element element) throws WriteExternalException {
-        DefaultJDOMExternalizer.writeExternal(this, element);
-    }
 }
