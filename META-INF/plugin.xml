@@ -7,6 +7,8 @@
         <ul> Features List:
           <li>Snippet repository</li>
           <li>Snippet Search</li>
+          <li>Snippet Live Template</li>
+          <li>Snippet Editing</li>
       </ul>
     ]]></description>
     <version>1.0</version>
