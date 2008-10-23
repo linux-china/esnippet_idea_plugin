@@ -1,7 +1,14 @@
 <!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
 <idea-plugin>
     <name>eSnippet Pro plugin</name>
-    <description>Make it to access code snippet repository easy!  The central repository is http://snippet.mvnsearch.org </description>
+    <description><![CDATA[
+        Make it to access code snippet repository easy!  The central repository is
+              <a href="http://snippet.mvnsearch.org" target="_blank">http://snippet.mvnsearch.org</a>.
+        <ul> Features List:
+          <li>Snippet repository</li>
+          <li>Snippet Search</li>
+      </ul>
+    ]]></description>
     <version>1.0</version>
     <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
