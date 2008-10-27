@@ -84,7 +84,6 @@ public class SearchPanelForm {
                 }).start();
             }
         });
-        jsyntaxpane.DefaultSyntaxKit.initKit();
     }
 
     /**
