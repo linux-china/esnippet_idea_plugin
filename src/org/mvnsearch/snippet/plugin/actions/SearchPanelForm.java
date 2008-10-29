@@ -260,7 +260,7 @@ public class SearchPanelForm {
      * @return snippet object
      */
     public Snippet getCurrentSnippet() {
-        if (currentCodeSnippetIndex < 0) return null;
+        if (currentCodeSnippetIndex < 0 || currentCodeSnippets.isEmpty()) return null;
         return currentCodeSnippets.get(currentCodeSnippetIndex);
     }
 }
