@@ -79,4 +79,14 @@ public class MvnSnippet extends Snippet {
     public void setRawDescription(String rawDescription) {
         this.rawDescription = rawDescription;
     }
+
+    /**
+     * get content type for snippet
+     *
+     * @return content type
+     */
+    @Override
+    public String getContentType() {
+        return "text/" + getLanguage();
+    }
 }
