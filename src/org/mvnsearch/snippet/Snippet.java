@@ -69,4 +69,13 @@ public class Snippet {
     public void setLanguage(String language) {
         this.language = language;
     }
+
+    /**
+     * get content type for snippet
+     *
+     * @return content type
+     */
+    public String getContentType() {
+        return "text/plain";
+    }
 }
