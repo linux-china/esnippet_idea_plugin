@@ -10,11 +10,14 @@ import org.mvnsearch.snippet.SnippetSearchAgentsFactory;
 import org.mvnsearch.snippet.plugin.ui.tree.ResultNode;
 import org.mvnsearch.snippet.plugin.ui.tree.RootNode;
 import org.mvnsearch.snippet.plugin.ui.tree.SearchAgentNode;
+import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -22,6 +25,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import jsyntaxpane.syntaxkits.JavaSyntaxKit;
+import jsyntaxpane.syntaxkits.XmlSyntaxKit;
 
 /**
  * snippet search panel form
@@ -113,6 +119,7 @@ public class SearchPanelForm {
      */
     private void displayAgentNode(SearchAgentNode searchAgentNode) {
         SnippetSearchAgent agent = searchAgentNode.getAgent();
+        codeEditorPane.setEditorKit(null);
         codeEditorPane.setText(agent.getDescription());
         htmlPane.setText(agent.getDescription());
         currentCodeSnippetIndex = -1;
@@ -203,7 +210,7 @@ public class SearchPanelForm {
         Snippet snippet = currentCodeSnippets.get(currentCodeSnippetIndex);
         htmlPane.setText(snippet.getDescription());
         htmlPane.setCaretPosition(0);
-        codeEditorPane.setContentType("text/xml");
+        codeEditorPane.setEditorKit(SnippetAppComponent.getInstance().getEditorKit(snippet.getContentType()));
         codeEditorPane.setText(snippet.getCode());
         codeEditorPane.setCaretPosition(0);
     }
