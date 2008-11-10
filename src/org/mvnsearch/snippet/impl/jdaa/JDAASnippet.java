@@ -110,4 +110,14 @@ public class JDAASnippet extends Snippet {
     public String getLanguage() {
         return "java";
     }
+
+    /**
+     * get content type for snippet
+     *
+     * @return content type
+     */
+    @Override
+    public String getContentType() {
+        return "text/java";
+    }
 }
