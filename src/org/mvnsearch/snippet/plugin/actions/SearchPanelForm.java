@@ -7,6 +7,7 @@ import com.intellij.openapi.util.IconLoader;
 import org.mvnsearch.snippet.Snippet;
 import org.mvnsearch.snippet.SnippetSearchAgent;
 import org.mvnsearch.snippet.SnippetSearchAgentsFactory;
+import org.mvnsearch.snippet.impl.mvnsearch.MvnSnippetSearchAgent;
 import org.mvnsearch.snippet.plugin.ui.tree.ResultNode;
 import org.mvnsearch.snippet.plugin.ui.tree.RootNode;
 import org.mvnsearch.snippet.plugin.ui.tree.SearchAgentNode;
@@ -62,6 +63,8 @@ public class SearchPanelForm {
         for (SnippetSearchAgent agent : SnippetSearchAgentsFactory.getInstance().getSnippetManagers()) {
             repositoryCombo.addItem(agent);
         }
+        //set mvn search agent by default
+        repositoryCombo.setSelectedItem(SnippetSearchAgentsFactory.getInstance().findAgent("msr"));
         searchForTextField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 search();
