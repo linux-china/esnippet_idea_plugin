@@ -98,7 +98,12 @@ public class DzoneSnippetSearchAgent extends SnippetSearchAgent {
         snippet.setTitle(titleTag.getLinkText());
         snippet.setId(titleTag.getLink().substring(titleTag.getLink().lastIndexOf("/") + 1));
         Div postBodyTag = (Div) postTag.getChild(3);
-        int dawnStart = postBodyTag.getChildrenHTML().indexOf("<pre class=\"dawn\">");
+        String anchor="<pre class=\"dawn\">";
+        int dawnStart = postBodyTag.getChildrenHTML().indexOf(anchor);
+        if(dawnStart == -1) {
+            anchor="<pre class=\"sunburst\">";
+            dawnStart  = postBodyTag.getChildrenHTML().indexOf(anchor);
+        }
         //if no code present, ignore it
         if (dawnStart == -1) return null;
         String description = postBodyTag.getChildrenHTML().substring(0, dawnStart).trim();
@@ -107,7 +112,7 @@ public class DzoneSnippetSearchAgent extends SnippetSearchAgent {
         }
         snippet.setDescription(description);
         int dawnEnd = postBodyTag.getChildrenHTML().indexOf("</pre>", dawnStart);
-        String code = postBodyTag.getChildrenHTML().substring(dawnStart + 18, dawnEnd);
+        String code = postBodyTag.getChildrenHTML().substring(dawnStart + anchor.length(), dawnEnd);
         //clean line number
         code = code.replaceAll("<span class=\"line-numbers\">.*?</span>", "");
         //clean html tag
