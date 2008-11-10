@@ -9,10 +9,8 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.TableRow;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
-import org.mvnsearch.snippet.Category;
-import org.mvnsearch.snippet.Comment;
-import org.mvnsearch.snippet.Snippet;
-import org.mvnsearch.snippet.SnippetSearchAgent;
+import org.htmlparser.util.ParserUtils;
+import org.mvnsearch.snippet.*;
 
 import java.util.*;
 
@@ -84,8 +82,7 @@ public class RegexlibSearchAgent extends SnippetSearchAgent {
         List<Snippet> snippets = new ArrayList<Snippet>();
         try {
             String searchUrl = "http://regexlib.com/Search.aspx?c=-1&m=-1&ps=20&k=" + StringUtils.join(keywords, "+");
-            Parser parser = new Parser();
-            parser.setURL(searchUrl);
+            Parser parser = ParserUtils.createParserParsingAnInputString(HttpClientManager.fetchUrlContent(searchUrl));
             NodeList nodeList = parser.extractAllNodesThatMatch(new HasAttributeFilter("class", "searchResultsTable"));
             for (Node node : nodeList.toNodeArray()) {
                 TableTag tableTag = (TableTag) node;
@@ -116,10 +113,10 @@ public class RegexlibSearchAgent extends SnippetSearchAgent {
         LinkTag authorLink = (LinkTag) authorRow.getColumns()[0].getChild(3);
         snippet.setAuthor(authorLink.getLinkText().trim());
         snippet.setDescription(tableTag.toHtml());
-        snippet.setDescription(snippet.getDescription().replace("src=\"App_Themes","src=\"http://regexlib.com/App_Themes"));
-        snippet.setDescription(snippet.getDescription().replace("<a href='RETester.aspx?regexp_id="+snippet.getId()+"' class=\"buttonSmall\">Test</a>",""));
-        snippet.setDescription(snippet.getDescription().replace("<a href='REDetails.aspx?regexp_id="+snippet.getId()+"' class=\"buttonSmall\">Details</a>",""));
-        snippet.setDetailUrl("http://regexlib.com/REDetails.aspx?regexp_id="+snippet.getId());
+        snippet.setDescription(snippet.getDescription().replace("src=\"App_Themes", "src=\"http://regexlib.com/App_Themes"));
+        snippet.setDescription(snippet.getDescription().replace("<a href='RETester.aspx?regexp_id=" + snippet.getId() + "' class=\"buttonSmall\">Test</a>", ""));
+        snippet.setDescription(snippet.getDescription().replace("<a href='REDetails.aspx?regexp_id=" + snippet.getId() + "' class=\"buttonSmall\">Details</a>", ""));
+        snippet.setDetailUrl("http://regexlib.com/REDetails.aspx?regexp_id=" + snippet.getId());
         return snippet;
     }
 
