@@ -127,7 +127,7 @@ public abstract class SnippetSearchAgent {
 
     @Override
     public String toString() {
-        return "[" + getId() + "]" + getDisplayName();
+        return "[" + getId() + "] " + getDisplayName();
     }
 
     /**
