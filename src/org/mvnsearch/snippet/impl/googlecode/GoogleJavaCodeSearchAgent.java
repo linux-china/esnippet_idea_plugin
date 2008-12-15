@@ -44,7 +44,7 @@ public class GoogleJavaCodeSearchAgent extends SnippetSearchAgent {
      * @return agent id
      */
     public String getId() {
-        return "googlej";
+        return "google";
     }
 
     /**
