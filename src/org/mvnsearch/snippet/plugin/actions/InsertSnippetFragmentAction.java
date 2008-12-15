@@ -18,23 +18,22 @@
 package org.mvnsearch.snippet.plugin.actions;
 
 import com.intellij.codeInsight.lookup.*;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataConstants;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.editor.actionSystem.EditorAction;
 import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiPackage;
-import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
+import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,16 +87,8 @@ public class InsertSnippetFragmentAction extends EditorAction {
                     } else {
                         editor.getSelectionModel().setSelection(caretOffset - prefix.length(), caretOffset + suffix.length());
                     }
-                    String rawCode = snippetService.renderTemplate(mnemonic, null, null, SnippetAppComponent.getInstance().userName);
-                    if (StringUtil.isNotEmpty(rawCode)) {     //found and replace
-                        final String code = addMacroSupport((PsiFile) dataContext.getData(DataConstants.PSI_FILE), editor, rawCode);
-                        ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                            public void run() {
-                                EditorModificationUtil.deleteBlockSelection(editor);
-                                EditorModificationUtil.insertStringAtCaret(editor, code);
-                            }
-                        });
-                    } else {    //code snippet not found, and code completion supplied
+                    boolean result = executeSnippetInsert(editor, (PsiFile) dataContext.getData(DataConstants.PSI_FILE), mnemonic);
+                    if (!result) { //snippet not found
                         List<String> variants = snippetService.findMnemonicList(prefix);
                         List<LookupItem<Object>> lookupItems = new ArrayList<LookupItem<Object>>();
                         for (String variant : variants) {
@@ -107,7 +98,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
                         LookupItem[] items = new LookupItem[lookupItems.size()];
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
-                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(this, editor, dataContext), prefix);
+                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, dataContext), prefix);
                     }
                 }
             }
@@ -150,32 +141,66 @@ public class InsertSnippetFragmentAction extends EditorAction {
     }
 
     /**
+     * execute snippet insert
+     *
+     * @param editor   editor
+     * @param psiFile  current psi file
+     * @param mnemonic mnemonic
+     * @return success mark
+     */
+    public static boolean executeSnippetInsert(final Editor editor, PsiFile psiFile, String mnemonic) {
+        SnippetService snippetService = SnippetAppComponent.getInstance().getSnippetService();
+        String rawCode = snippetService.renderTemplate(mnemonic, null, null, SnippetAppComponent.getInstance().userName);
+        if (StringUtil.isNotEmpty(rawCode)) {     //found and replace
+            final String code = addMacroSupport(psiFile, editor, rawCode);
+            ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                public void run() {
+                    EditorModificationUtil.deleteBlockSelection(editor);
+                    EditorModificationUtil.insertStringAtCaret(editor, code);
+                }
+            });
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * lookup item preference policy
      */
     private static class LookupItemPreferencePolicyImpl implements LookupItemPreferencePolicy {
-        private InsertSnippetFragmentHanlder handler;
         private Editor editor;
         private DataContext dataContext;
 
         /**
          * constructure method
          *
-         * @param handler     handler after completion
          * @param editor      current editor
          * @param dataContext dataContext
          */
-        public LookupItemPreferencePolicyImpl(InsertSnippetFragmentHanlder handler, Editor editor, DataContext dataContext) {
-            this.handler = handler;
+        public LookupItemPreferencePolicyImpl(Editor editor, DataContext dataContext) {
             this.editor = editor;
             this.dataContext = dataContext;
         }
 
+        /**
+         * execute snippet insert
+         *
+         * @param lookupElement lookup element
+         * @param lookup        lookup object
+         */
         public void itemSelected(LookupElement lookupElement, Lookup lookup) {
-            handler.executeWriteAction(editor, dataContext);
+            executeSnippetInsert(editor, (PsiFile) dataContext.getData(DataConstants.PSI_FILE), lookupElement.getLookupString());
         }
 
-        public int compare(LookupElement o1, LookupElement o2) {
-            return o1.getLookupString().compareTo(o2.getLookupString());
+        /**
+         * item compare
+         *
+         * @param element1 element1
+         * @param element2 element2
+         * @return result
+         */
+        public int compare(LookupElement element1, LookupElement element2) {
+            return element1.getLookupString().compareTo(element2.getLookupString());
         }
     }
 }
