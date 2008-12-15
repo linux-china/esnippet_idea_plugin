@@ -11,25 +11,29 @@
           <li>Snippet Editing</li>
       </ul>
     ]]></description>
-    <version>1.1</version>
+    <version>1.1.1</version>
     <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
     </vendor>
     <idea-version since-build="8000"/>
     <change-notes>
         <![CDATA[
-            <ul>Change List in 1.1
-                      <li>Syntax color high light introduced by jsyntaxpane</li>
-                      <li>Fix DZone snippet repository query logic</li>
-                      <li>Fix regexlib.com snippet repository query logic</li>
-                      <li>Minor bug fix</li>
-              </ul>
-              <ul>Change List in 1.0.1
-                      <li>Compiled by Jdk 1.5</li>
-              </ul>
-              <ul>Change List in 1.0
-                      <li>Initial Version</li>
-              </ul>
+       <ul>Change List in 1.1.1
+            <li>Bug fix for datacontext between event</li>
+        </ul>
+        <ul>Change List in 1.1
+            <li>Syntax color high light introduced by jsyntaxpane</li>
+            <li>Fix DZone snippet repository query logic</li>
+            <li>Fix regexlib.com snippet repository query logic</li>
+            <li>Minor bug fix
+            </li>
+        </ul>
+        <ul>Change List in 1.0.1
+            <li>Compiled by Jdk 1.5</li>
+        </ul>
+        <ul>Change List in 1.0
+            <li>Initial Version</li>
+        </ul>
             ]]>
     </change-notes>
     <actions>
@@ -50,7 +54,8 @@
                     icon="/actions/help.png" text="About eSnippet"/>
             <action id="eSnippet.NextCodeSnippet" class="org.mvnsearch.snippet.plugin.actions.NextCodeSnippetAction"
                     icon="/actions/nextfile.png" text="Next Code Snippet"/>
-            <action id="eSnippet.PreviousCodeSnippet" class="org.mvnsearch.snippet.plugin.actions.PreviousCodeSnippetAction"
+            <action id="eSnippet.PreviousCodeSnippet"
+                    class="org.mvnsearch.snippet.plugin.actions.PreviousCodeSnippetAction"
                     icon="/actions/prevfile.png" text="Previous Code Snippet"/>
             <action id="eSnippet.Paste" class="org.mvnsearch.snippet.plugin.actions.PasteAction"
                     icon="/actions/menu-paste.png" text="Insert into Active Editor"/>
