@@ -19,7 +19,8 @@
     <change-notes>
         <![CDATA[
        <ul>Change List in 1.1.1
-            <li>Bug fix for datacontext between event</li>
+            <li>Bug fix for datacontext between events</li>
+            <li>Minor bugs fixed </li>
         </ul>
         <ul>Change List in 1.1
             <li>Syntax color high light introduced by jsyntaxpane</li>
