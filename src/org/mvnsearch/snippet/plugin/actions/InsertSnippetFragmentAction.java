@@ -78,6 +78,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
                 }
                 SnippetService snippetService = SnippetAppComponent.getInstance().getSnippetService();
                 if (snippetService != null) {
+                    PsiFile currentPsiFile = (PsiFile) dataContext.getData(DataConstants.PSI_FILE);
                     //delete snippet mnemonic and replaced by fragment content
                     String prefix = prefixBuilder.reverse().toString();
                     String suffix = suffixBuilder.reverse().toString();
@@ -87,7 +88,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
                     } else {
                         editor.getSelectionModel().setSelection(caretOffset - prefix.length(), caretOffset + suffix.length());
                     }
-                    boolean result = executeSnippetInsert(editor, (PsiFile) dataContext.getData(DataConstants.PSI_FILE), mnemonic);
+                    boolean result = executeSnippetInsert(editor, currentPsiFile, mnemonic);
                     if (!result) { //snippet not found
                         List<String> variants = snippetService.findMnemonicList(prefix);
                         List<LookupItem<Object>> lookupItems = new ArrayList<LookupItem<Object>>();
@@ -98,7 +99,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
                         LookupItem[] items = new LookupItem[lookupItems.size()];
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
-                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, dataContext), prefix);
+                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, currentPsiFile), prefix);
                     }
                 }
             }
@@ -169,17 +170,17 @@ public class InsertSnippetFragmentAction extends EditorAction {
      */
     private static class LookupItemPreferencePolicyImpl implements LookupItemPreferencePolicy {
         private Editor editor;
-        private DataContext dataContext;
+        private PsiFile psiFile;
 
         /**
          * constructure method
          *
-         * @param editor      current editor
-         * @param dataContext dataContext
+         * @param editor  current editor
+         * @param psiFile psi file
          */
-        public LookupItemPreferencePolicyImpl(Editor editor, DataContext dataContext) {
+        public LookupItemPreferencePolicyImpl(Editor editor, PsiFile psiFile) {
             this.editor = editor;
-            this.dataContext = dataContext;
+            this.psiFile = psiFile;
         }
 
         /**
@@ -189,7 +190,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
          * @param lookup        lookup object
          */
         public void itemSelected(LookupElement lookupElement, Lookup lookup) {
-            executeSnippetInsert(editor, (PsiFile) dataContext.getData(DataConstants.PSI_FILE), lookupElement.getLookupString());
+            executeSnippetInsert(editor, psiFile, lookupElement.getLookupString());
         }
 
         /**
