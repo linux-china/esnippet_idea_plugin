@@ -13,16 +13,13 @@
  */
 package jsyntaxpane;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Shape;
+import jsyntaxpane.util.Configuration;
+
+import javax.swing.text.*;
+import java.awt.*;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.text.*;
-
-import jsyntaxpane.util.Configuration;
 
 public class SyntaxView extends PlainView {
 
@@ -34,10 +31,10 @@ public class SyntaxView extends PlainView {
 
     /**
      * Construct a new view using the given configuration and prefix given
-     * 
-     * @param element
-     * @param config
-     * @param prefix
+     *
+     * @param element element
+     * @param config  config
+     * @param prefix  prefix
      */
     public SyntaxView(Element element, Configuration config, String prefix) {
         super(element);
@@ -52,12 +49,12 @@ public class SyntaxView extends PlainView {
     }
 
     @Override
-    protected int drawUnselectedText(Graphics graphics, int x, int y, int p0, int p1) throws BadLocationException{
+    protected int drawUnselectedText(Graphics graphics, int x, int y, int p0, int p1) throws BadLocationException {
         Font saveFont = graphics.getFont();
         Color saveColor = graphics.getColor();
         Document doc1 = getDocument();
-        if(! (doc1 instanceof SyntaxDocument)) {
-            return super.drawUnselectedText(graphics,x,y,p0,p1);
+        if (!(doc1 instanceof SyntaxDocument)) {
+            return super.drawUnselectedText(graphics, x, y, p0, p1);
         }
         SyntaxDocument doc = (SyntaxDocument) doc1;
         Segment segment = getLineBuffer();
@@ -134,8 +131,8 @@ public class SyntaxView extends PlainView {
 
     @Override
     protected void updateDamage(javax.swing.event.DocumentEvent changes,
-            Shape a,
-            ViewFactory f) {
+                                Shape a,
+                                ViewFactory f) {
         super.updateDamage(changes, a, f);
         java.awt.Component host = getContainer();
         host.repaint();
