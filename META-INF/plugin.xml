@@ -4,6 +4,7 @@
     <description><![CDATA[
         Make it to access code snippet repository easy!  The central repository is
               <a href="http://snippet.mvnsearch.org" target="_blank">http://snippet.mvnsearch.org</a>.
+              You can find all source code at <a href="http://code.google.com/p/esnippet" target="_blank">http://code.google.com/p/esnippet</a>
         <ul> Features List:
           <li>Snippet repository</li>
           <li>Snippet Search</li>
@@ -20,7 +21,7 @@
         <![CDATA[
        <ul>Change List in 1.1.1
             <li>Bug fix for datacontext between events</li>
-            <li>Minor bugs fixed </li>
+            <li>Minor bugs fixed</li>
         </ul>
         <ul>Change List in 1.1
             <li>Syntax color high light introduced by jsyntaxpane</li>
