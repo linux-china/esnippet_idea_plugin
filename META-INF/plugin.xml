@@ -12,14 +12,17 @@
           <li>Snippet Editing</li>
       </ul>
     ]]></description>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
     </vendor>
     <idea-version since-build="8000"/>
     <change-notes>
         <![CDATA[
-       <ul>Change List in 1.1.1
+        <ul>Change List in 1.1.2
+            <li>Bug fix for class cast exception</li>
+        </ul>
+        <ul>Change List in 1.1.1
             <li>Bug fix for datacontext between events</li>
             <li>Minor bugs fixed</li>
         </ul>
