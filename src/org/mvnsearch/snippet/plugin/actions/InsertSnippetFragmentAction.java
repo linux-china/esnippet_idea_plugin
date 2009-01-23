@@ -99,7 +99,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
                         LookupItem[] items = new LookupItem[lookupItems.size()];
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
-                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, currentPsiFile), prefix);
+                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, currentPsiFile));
                     }
                 }
             }
