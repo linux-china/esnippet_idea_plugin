@@ -22,7 +22,6 @@ import com.intellij.openapi.actionSystem.DataConstants;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.editor.actionSystem.EditorAction;
 import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
 import com.intellij.openapi.util.IconLoader;
@@ -83,12 +82,13 @@ public class InsertSnippetFragmentAction extends EditorAction {
                     String prefix = prefixBuilder.reverse().toString();
                     String suffix = suffixBuilder.reverse().toString();
                     String mnemonic = prefix + suffix;
+                    int offset1 = caretOffset - prefix.length();
+                    int offset2 = caretOffset;
                     if (StringUtil.isEmpty(suffix)) {
-                        editor.getSelectionModel().setSelection(caretOffset - prefix.length(), caretOffset);
                     } else {
-                        editor.getSelectionModel().setSelection(caretOffset - prefix.length(), caretOffset + suffix.length());
+                        offset2 = caretOffset + suffix.length();
                     }
-                    boolean result = executeSnippetInsert(editor, currentPsiFile, mnemonic);
+                    boolean result = executeSnippetInsert(editor, offset1, offset2, currentPsiFile, mnemonic);
                     if (!result) { //snippet not found
                         List<String> variants = snippetService.findMnemonicList(prefix);
                         List<LookupItem<Object>> lookupItems = new ArrayList<LookupItem<Object>>();
@@ -99,7 +99,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
                         LookupItem[] items = new LookupItem[lookupItems.size()];
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
-                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, currentPsiFile));
+                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, offset1, offset2, currentPsiFile));
                     }
                 }
             }
@@ -145,19 +145,20 @@ public class InsertSnippetFragmentAction extends EditorAction {
      * execute snippet insert
      *
      * @param editor   editor
+     * @param offset1  offset 1
+     * @param offset2  offset 2
      * @param psiFile  current psi file
      * @param mnemonic mnemonic
      * @return success mark
      */
-    public static boolean executeSnippetInsert(final Editor editor, PsiFile psiFile, String mnemonic) {
+    public static boolean executeSnippetInsert(final Editor editor, final int offset1, final int offset2, PsiFile psiFile, String mnemonic) {
         SnippetService snippetService = SnippetAppComponent.getInstance().getSnippetService();
         String rawCode = snippetService.renderTemplate(mnemonic, null, null, SnippetAppComponent.getInstance().userName);
         if (StringUtil.isNotEmpty(rawCode)) {     //found and replace
             final String code = addMacroSupport(psiFile, editor, rawCode);
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 public void run() {
-                    EditorModificationUtil.deleteBlockSelection(editor);
-                    EditorModificationUtil.insertStringAtCaret(editor, code);
+                    editor.getDocument().replaceString(offset1, offset2, code);
                 }
             });
             return true;
@@ -170,16 +171,23 @@ public class InsertSnippetFragmentAction extends EditorAction {
      */
     private static class LookupItemPreferencePolicyImpl implements LookupItemPreferencePolicy {
         private Editor editor;
+        private int offset1;
+        private int offset2;
         private PsiFile psiFile;
 
         /**
          * constructure method
          *
          * @param editor  current editor
+         * @param prefix  prefix
+         * @param offset1 offset1
+         * @param offset2 offset2
          * @param psiFile psi file
          */
-        public LookupItemPreferencePolicyImpl(Editor editor, PsiFile psiFile) {
+        public LookupItemPreferencePolicyImpl(Editor editor, int offset1, int offset2, PsiFile psiFile) {
             this.editor = editor;
+            this.offset1 = offset1;
+            this.offset2 = offset2;
             this.psiFile = psiFile;
         }
 
@@ -190,7 +198,8 @@ public class InsertSnippetFragmentAction extends EditorAction {
          * @param lookup        lookup object
          */
         public void itemSelected(LookupElement lookupElement, Lookup lookup) {
-            executeSnippetInsert(editor, psiFile, lookupElement.getLookupString());
+            String lookupString = lookupElement.getLookupString();
+            executeSnippetInsert(editor, offset1, offset2 + lookupString.length(), psiFile, lookupString);
         }
 
         /**
