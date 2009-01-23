@@ -179,7 +179,6 @@ public class InsertSnippetFragmentAction extends EditorAction {
          * constructure method
          *
          * @param editor  current editor
-         * @param prefix  prefix
          * @param offset1 offset1
          * @param offset2 offset2
          * @param psiFile psi file
