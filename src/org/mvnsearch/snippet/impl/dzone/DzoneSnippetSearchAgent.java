@@ -17,8 +17,8 @@
 
 package org.mvnsearch.snippet.impl.dzone;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.HasAttributeFilter;
@@ -115,21 +115,20 @@ public class DzoneSnippetSearchAgent extends SnippetSearchAgent {
         snippet.setTitle(titleTag.getLinkText());
         snippet.setId(titleTag.getLink().substring(titleTag.getLink().lastIndexOf("/") + 1));
         Div postBodyTag = (Div) postTag.getChild(3);
-        String anchor="<pre class=\"dawn\">";
-        int dawnStart = postBodyTag.getChildrenHTML().indexOf(anchor);
-        if(dawnStart == -1) {
-            anchor="<pre class=\"sunburst\">";
-            dawnStart  = postBodyTag.getChildrenHTML().indexOf(anchor);
+        String anchor = "<pre>";
+        int codeStart = postBodyTag.getChildrenHTML().indexOf(anchor);
+        if (codeStart == -1) {
+            return null;
         }
-        //if no code present, ignore it
-        if (dawnStart == -1) return null;
-        String description = postBodyTag.getChildrenHTML().substring(0, dawnStart).trim();
-        if (description.startsWith("//")) {
-            description = description.substring(2);
+        if (codeStart > 0) {
+            String description = postBodyTag.getChildrenHTML().substring(0, codeStart).trim();
+            if (description.startsWith("//")) {
+                description = description.substring(2);
+            }
+            snippet.setDescription(description);
         }
-        snippet.setDescription(description);
-        int dawnEnd = postBodyTag.getChildrenHTML().indexOf("</pre>", dawnStart);
-        String code = postBodyTag.getChildrenHTML().substring(dawnStart + anchor.length(), dawnEnd);
+        int dawnEnd = postBodyTag.getChildrenHTML().indexOf("</pre>", codeStart);
+        String code = postBodyTag.getChildrenHTML().substring(codeStart + anchor.length(), dawnEnd).trim();
         //clean line number
         code = code.replaceAll("<span class=\"line-numbers\">.*?</span>", "");
         //clean html tag
@@ -140,7 +139,7 @@ public class DzoneSnippetSearchAgent extends SnippetSearchAgent {
         int authorStart = postMetaTag.getChildrenHTML().indexOf("<a href=\"/user/") + 15;
         String author = postMetaTag.getChildrenHTML().substring(authorStart, postMetaTag.getChildrenHTML().indexOf("\"", authorStart));
         snippet.setAuthor(author);
-        snippet.setDetailUrl("http://snippets.dzone.com/posts/show/"+snippet.getId());
+        snippet.setDetailUrl("http://snippets.dzone.com/posts/show/" + snippet.getId());
         return snippet;
     }
 
