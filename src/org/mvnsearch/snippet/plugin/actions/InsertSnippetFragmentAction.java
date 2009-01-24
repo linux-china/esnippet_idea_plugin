@@ -90,10 +90,11 @@ public class InsertSnippetFragmentAction extends EditorAction {
                     }
                     boolean result = executeSnippetInsert(editor, offset1, offset2, currentPsiFile, mnemonic);
                     if (!result) { //snippet not found
-                        List<String> variants = snippetService.findMnemonicList(prefix);
+                        List<String> variants = snippetService.findMnemonicListWithName(prefix);
                         List<LookupItem<Object>> lookupItems = new ArrayList<LookupItem<Object>>();
                         for (String variant : variants) {
-                            Object obj = LookupValueFactory.createLookupValue(variant, IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/logo.png"));
+                            String[] parts = variant.split(":", 2);
+                            Object obj = LookupValueFactory.createLookupValueWithHint(parts[0], IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/logo.png"), parts[1]);
                             lookupItems.add(new LookupItem<Object>(obj, variant));
                         }
                         LookupItem[] items = new LookupItem[lookupItems.size()];
