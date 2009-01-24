@@ -56,6 +56,14 @@ public interface SnippetService {
     public List<String> findMnemonicList(String prefix);
 
     /**
+     * find mnemonic list according to prefix
+     *
+     * @param prefix prefix
+     * @return mnemonic list, max size is 100
+     */
+    public List<String> findMnemonicListWithName(String prefix);
+    
+    /**
      * @param mnemonicPrefix mnemonic prefix
      * @return snippet list
      */
