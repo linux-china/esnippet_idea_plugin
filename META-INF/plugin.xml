@@ -24,6 +24,7 @@
             <li>Bug fix for DZone snippet search</li>
             <li>Bug fix for completion</li>
             <li>Remove word selection for completion</li>
+            <li>Mnemonic completion with hint support</li>
         </ul>
         <ul>Change List in 1.1.2
             <li>Bug fix for class cast exception</li>
