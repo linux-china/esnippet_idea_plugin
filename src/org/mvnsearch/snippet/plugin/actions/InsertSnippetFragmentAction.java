@@ -199,7 +199,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
          */
         public void itemSelected(LookupElement lookupElement, Lookup lookup) {
             String lookupString = lookupElement.getLookupString();
-            executeSnippetInsert(editor, offset1, offset2 + lookupString.length(), psiFile, lookupString);
+            executeSnippetInsert(editor, offset1, offset2 + lookupString.length(), psiFile, lookupString.split(":")[0]);
         }
 
         /**
