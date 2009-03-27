@@ -32,7 +32,7 @@ import java.util.*;
  * @author linux_china@hotmail.com
  */
 public class MvnSnippetSearchAgent extends SnippetSearchAgent {
-    private static String serviceUrl = "http://snippet.mvnsearch.org/remoting/snippetService";  //hessian service url
+    public static String serviceUrl = "http://snippet.mvnsearch.org/remoting/snippetService";  //hessian service url
     private SnippetService snippetService;  //snippet service to mvnsearch site
     private List<Category> categories;
     private Map<String, String> languagesData = new HashMap<String, String>();
