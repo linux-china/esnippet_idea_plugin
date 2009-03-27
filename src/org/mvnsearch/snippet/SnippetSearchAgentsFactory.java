@@ -18,11 +18,11 @@
 package org.mvnsearch.snippet;
 
 import com.intellij.openapi.ui.Messages;
+import org.mvnsearch.snippet.impl.dzone.DzoneSnippetSearchAgent;
+import org.mvnsearch.snippet.impl.googlecode.GoogleJavaCodeSearchAgent;
 import org.mvnsearch.snippet.impl.jdaa.JDAASnippetSearchAgent;
 import org.mvnsearch.snippet.impl.mvnsearch.MvnSnippetSearchAgent;
-import org.mvnsearch.snippet.impl.googlecode.GoogleJavaCodeSearchAgent;
 import org.mvnsearch.snippet.impl.regex.RegexlibSearchAgent;
-import org.mvnsearch.snippet.impl.dzone.DzoneSnippetSearchAgent;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,6 +36,7 @@ import java.util.Map;
 public class SnippetSearchAgentsFactory {
     private Map<String, SnippetSearchAgent> searchAgents;   //all agents
     private static SnippetSearchAgentsFactory factory;  //singleton instance
+    public static boolean RubyMinePlugin = false; //rubymine plugin
 
     /**
      * get search agents factory
