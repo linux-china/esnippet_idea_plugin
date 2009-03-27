@@ -40,6 +40,17 @@ import java.util.List;
  * @author linux_china@hotmail.com
  */
 public class DzoneSnippetSearchAgent extends SnippetSearchAgent {
+    private String defaultTag;
+
+    /**
+     * set default tag
+     *
+     * @param defaultTag default tag
+     */
+    public void setDefaultTag(String defaultTag) {
+        this.defaultTag = defaultTag;
+    }
+
     /**
      * agent id
      *
@@ -86,6 +97,9 @@ public class DzoneSnippetSearchAgent extends SnippetSearchAgent {
         List<Snippet> snippets = new ArrayList<Snippet>();
         try {
             String searchUrl = "http://snippets.dzone.com/search/get_results?q=" + StringUtils.join(keywords, "+");
+            if (defaultTag != null && searchUrl.indexOf("+" + defaultTag) == -1) {
+                searchUrl = searchUrl + "+" + defaultTag;
+            }
             Parser parser = new Parser();
             parser.setURL(searchUrl);
             NodeList nodeList = parser.extractAllNodesThatMatch(new HasAttributeFilter("class", "post"));
