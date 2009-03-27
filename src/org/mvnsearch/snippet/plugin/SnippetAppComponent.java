@@ -20,22 +20,15 @@ package org.mvnsearch.snippet.plugin;
 import com.caucho.hessian.client.HessianProxyFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.util.*;
-import com.intellij.openapi.util.text.StringUtil;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.mvnsearch.snippet.plugin.ui.RepositoryInfoForm;
-import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
-
-import javax.swing.*;
-import javax.swing.text.EditorKit;
-
 import jsyntaxpane.syntaxkits.*;
+import org.jetbrains.annotations.NotNull;
+import org.mvnsearch.snippet.impl.mvnsearch.MvnSnippetSearchAgent;
+import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
+import org.mvnsearch.snippet.plugin.ui.RepositoryInfoForm;
 
-import java.util.Map;
+import javax.swing.text.EditorKit;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * snippet application component
@@ -44,7 +37,6 @@ import java.util.HashMap;
  */
 public class SnippetAppComponent implements ApplicationComponent {
     private SnippetService snippetService;
-    public String serviceUrl;  //service url
     public String userName;    //user name
     private RepositoryInfoForm form = new RepositoryInfoForm();
     private Map<String, EditorKit> editorKits = new HashMap<String, EditorKit>();
@@ -103,11 +95,8 @@ public class SnippetAppComponent implements ApplicationComponent {
      */
     public void initSnippetService() {
         try {
-            if (StringUtil.isEmpty(serviceUrl)) {
-                serviceUrl = "http://snippet.mvnsearch.org/remoting/snippetService";
-            }
             HessianProxyFactory factory = new HessianProxyFactory();
-            snippetService = (SnippetService) factory.create(SnippetService.class, serviceUrl, this.getClass().getClassLoader());
+            snippetService = (SnippetService) factory.create(SnippetService.class, MvnSnippetSearchAgent.serviceUrl, this.getClass().getClassLoader());
         } catch (Exception e) {
             e.printStackTrace();
         }
