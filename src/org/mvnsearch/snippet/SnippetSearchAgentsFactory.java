@@ -56,16 +56,24 @@ public class SnippetSearchAgentsFactory {
     private SnippetSearchAgentsFactory() {
         searchAgents = new HashMap<String, SnippetSearchAgent>();
         try {
-            JDAASnippetSearchAgent jdaSnippetSearchAgent = new JDAASnippetSearchAgent();
-            searchAgents.put(jdaSnippetSearchAgent.getId(), jdaSnippetSearchAgent);
+            if (!RubyMinePlugin) {
+                JDAASnippetSearchAgent jdaSnippetSearchAgent = new JDAASnippetSearchAgent();
+                searchAgents.put(jdaSnippetSearchAgent.getId(), jdaSnippetSearchAgent);
+                GoogleJavaCodeSearchAgent googleJavaAgent = new GoogleJavaCodeSearchAgent();
+                searchAgents.put(googleJavaAgent.getId(), googleJavaAgent);
+            }
             MvnSnippetSearchAgent mvnAgent = new MvnSnippetSearchAgent();
             searchAgents.put(mvnAgent.getId(), mvnAgent);
-            GoogleJavaCodeSearchAgent googleJavaAgent = new GoogleJavaCodeSearchAgent();
-            searchAgents.put(googleJavaAgent.getId(), googleJavaAgent);
+            if (RubyMinePlugin) {
+                MvnSnippetSearchAgent.serviceUrl = "http://snippet.mvnsearch.org/remoting/rubySnippetService";
+            }
             RegexlibSearchAgent regexAgent = new RegexlibSearchAgent();
             searchAgents.put(regexAgent.getId(), regexAgent);
             DzoneSnippetSearchAgent dzoneAgent = new DzoneSnippetSearchAgent();
             searchAgents.put(dzoneAgent.getId(), dzoneAgent);
+            if(RubyMinePlugin) {
+                dzoneAgent.setDefaultTag("ruby");
+            }
         } catch (Exception ex) {
             Messages.showErrorDialog(ex.getMessage(), "Failed to create search agents");
         }
