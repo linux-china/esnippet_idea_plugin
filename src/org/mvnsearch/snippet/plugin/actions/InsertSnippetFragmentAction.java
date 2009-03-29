@@ -31,6 +31,7 @@ import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiPackage;
+import org.mvnsearch.snippet.SnippetSearchAgentsFactory;
 import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
 import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
@@ -121,11 +122,13 @@ public class InsertSnippetFragmentAction extends EditorAction {
         if (virtualFile != null) {
             String fileName = virtualFile.getName();
             newCode = newCode.replace("${FILE_NAME}", fileName);
-            PsiDirectory psiDirectory = psiFile.getParent();
-            if (psiDirectory != null) {
-                PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
-                if (psiPackage != null && psiPackage.getName() != null) {
-                    newCode = newCode.replace("${PACKAGE_NAME}", psiPackage.getName());
+            if (!SnippetSearchAgentsFactory.RubyMinePlugin) {
+                PsiDirectory psiDirectory = psiFile.getParent();
+                if (psiDirectory != null) {
+                    PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
+                    if (psiPackage != null && psiPackage.getName() != null) {
+                        newCode = newCode.replace("${PACKAGE_NAME}", psiPackage.getName());
+                    }
                 }
             }
         }
