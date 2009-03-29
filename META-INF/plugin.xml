@@ -12,13 +12,18 @@
           <li>Snippet Editing</li>
       </ul>
     ]]></description>
-    <version>1.2</version>
+    <version>1.3</version>
     <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
     </vendor>
+    <!--<depends>com.intellij.modules.lang</depends>-->
     <idea-version since-build="9677"/>
     <change-notes>
         <![CDATA[
+        <ul>Change List in 1.3
+            <li>Add RubyMine suport</li>
+            <li>Mvnsearch URL Switch only one setting</li>
+        </ul>
         <ul>Change List in 1.2
             <li>EAP 8.1 Build</li>
             <li>Bug fix for DZone snippet search</li>
