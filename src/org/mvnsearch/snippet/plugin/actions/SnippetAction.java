@@ -19,7 +19,7 @@ package org.mvnsearch.snippet.plugin.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import org.mvnsearch.snippet.plugin.SnippetProjectComponent;
 
@@ -37,7 +37,7 @@ public abstract class SnippetAction extends AnAction {
      */
     @SuppressWarnings({"ConstantConditions"})
     public SearchPanelForm getSearchPanelForm(final AnActionEvent event) {
-        final Project project = event.getData(DataKeys.PROJECT);
+        final Project project = event.getData(PlatformDataKeys.PROJECT);
         final SnippetProjectComponent projectComponent = project.getComponent(SnippetProjectComponent.class);
         return projectComponent.getSearchPanelForm();
     }

@@ -18,7 +18,7 @@
 package org.mvnsearch.snippet.plugin.actions;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import org.mvnsearch.snippet.Snippet;
@@ -48,7 +48,7 @@ public class EditSnippetAction extends SnippetAction {
      * @param event event
      */
     public void actionPerformed(final AnActionEvent event) {
-        Project project = event.getData(DataKeys.PROJECT);
+        Project project = event.getData(PlatformDataKeys.PROJECT);
         final SearchPanelForm searchPanelForm = getSearchPanelForm(event);
         final Snippet currentSnippet = searchPanelForm.getCurrentSnippet();
         editForm.fillInfo(searchPanelForm.getSelectedAgent(), currentSnippet);

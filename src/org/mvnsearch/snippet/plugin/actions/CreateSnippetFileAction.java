@@ -19,7 +19,8 @@ package org.mvnsearch.snippet.plugin.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
@@ -37,8 +38,8 @@ import org.mvnsearch.snippet.plugin.ui.SnippetFileCreationForm;
  */
 public class CreateSnippetFileAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
-        final Project project = event.getData(DataKeys.PROJECT);
-        final PsiElement psiElement = event.getData(DataKeys.PSI_ELEMENT);
+        final Project project = event.getData(PlatformDataKeys.PROJECT);
+        final PsiElement psiElement = event.getData(LangDataKeys.PSI_ELEMENT);
         if (psiElement instanceof PsiDirectory) {
             final SnippetFileCreationForm form = new SnippetFileCreationForm();
             final DialogBuilder builder = new DialogBuilder(project);
