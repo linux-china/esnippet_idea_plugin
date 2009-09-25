@@ -57,10 +57,9 @@ public interface SnippetService {
      * find mnemonic list according to prefix
      *
      * @param prefix prefix
-     * @param isFile is file fragement
      * @return mnemonic list, max size is 100
      */
-    public List<String> findMnemonicList(String prefix, boolean isFile);
+    public List<String> findFileMnemonicList(String prefix);
 
     /**
      * find mnemonic list according to prefix
