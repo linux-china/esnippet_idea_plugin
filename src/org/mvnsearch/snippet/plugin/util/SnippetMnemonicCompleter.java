@@ -18,8 +18,8 @@
 package org.mvnsearch.snippet.plugin.util;
 
 import com.intellij.openapi.util.text.StringUtil;
-import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
+import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
@@ -44,7 +44,8 @@ public class SnippetMnemonicCompleter extends AutoCompleter {
         String value = textComp.getText();
         if (StringUtil.isNotEmpty(value)) {
             SnippetService service = SnippetAppComponent.getInstance().getSnippetService();
-            List<String> mnemonicList = service.findMnemonicList(value);
+            //find file fragement
+            List<String> mnemonicList = service.findMnemonicList(value, true);
             if (mnemonicList != null && mnemonicList.size() > 0) {
                 if (!(mnemonicList.size() == 1 && mnemonicList.get(0).equals(value))) {
                     list.setListData(mnemonicList.toArray());
