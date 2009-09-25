@@ -17,8 +17,6 @@
 
 package org.mvnsearch.snippet.impl.mvnsearch;
 
-import org.mvnsearch.snippet.Category;
-
 import java.util.List;
 import java.util.Map;
 
@@ -59,10 +57,19 @@ public interface SnippetService {
      * find mnemonic list according to prefix
      *
      * @param prefix prefix
+     * @param isFile is file fragement
+     * @return mnemonic list, max size is 100
+     */
+    public List<String> findMnemonicList(String prefix, boolean isFile);
+
+    /**
+     * find mnemonic list according to prefix
+     *
+     * @param prefix prefix
      * @return mnemonic list, max size is 100
      */
     public List<String> findMnemonicListWithName(String prefix);
-    
+
     /**
      * @param mnemonicPrefix mnemonic prefix
      * @return snippet list
