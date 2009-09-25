@@ -45,7 +45,7 @@ public class SnippetMnemonicCompleter extends AutoCompleter {
         if (StringUtil.isNotEmpty(value)) {
             SnippetService service = SnippetAppComponent.getInstance().getSnippetService();
             //find file fragement
-            List<String> mnemonicList = service.findMnemonicList(value, true);
+            List<String> mnemonicList = service.findFileMnemonicList(value);
             if (mnemonicList != null && mnemonicList.size() > 0) {
                 if (!(mnemonicList.size() == 1 && mnemonicList.get(0).equals(value))) {
                     list.setListData(mnemonicList.toArray());
