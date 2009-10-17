@@ -27,10 +27,7 @@ import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiPackage;
+import com.intellij.psi.*;
 import org.mvnsearch.snippet.SnippetSearchAgentsFactory;
 import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
 import org.mvnsearch.snippet.plugin.SnippetAppComponent;
@@ -48,13 +45,13 @@ public class InsertSnippetFragmentAction extends EditorAction {
      * construct snippet fragment action
      */
     public InsertSnippetFragmentAction() {
-        super(new InsertSnippetFragmentHanlder());
+        super(new InsertSnippetFragmentHandler());
     }
 
     /**
      * insert snippet fragment handler
      */
-    public static class InsertSnippetFragmentHanlder extends EditorWriteActionHandler {
+    public static class InsertSnippetFragmentHandler extends EditorWriteActionHandler {
         /**
          * execute insert logic
          *
@@ -78,30 +75,48 @@ public class InsertSnippetFragmentAction extends EditorAction {
                 }
                 SnippetService snippetService = SnippetAppComponent.getInstance().getSnippetService();
                 if (snippetService != null) {
-                    PsiFile currentPsiFile = (PsiFile) dataContext.getData(DataConstants.PSI_FILE);
+                    final PsiFile currentPsiFile = (PsiFile) dataContext.getData(DataConstants.PSI_FILE);
                     //delete snippet mnemonic and replaced by fragment content
-                    String prefix = prefixBuilder.reverse().toString();
+                    final String prefix = prefixBuilder.reverse().toString();
                     String suffix = suffixBuilder.reverse().toString();
                     String mnemonic = prefix + suffix;
-                    int offset1 = caretOffset - prefix.length();
+                    final int offset1 = caretOffset - prefix.length();
                     int offset2 = caretOffset;
-                    if (StringUtil.isEmpty(suffix)) {
-                    } else {
+                    if (!StringUtil.isEmpty(suffix)) {
                         offset2 = caretOffset + suffix.length();
                     }
+                    final int offset3 = offset2;
                     boolean result = executeSnippetInsert(editor, offset1, offset2, currentPsiFile, mnemonic);
                     if (!result) { //snippet not found
                         List<String> variants = snippetService.findMnemonicListWithName(prefix);
-                        List<LookupItem<Object>> lookupItems = new ArrayList<LookupItem<Object>>();
+                        List<LookupElement> lookupItems = new ArrayList<LookupElement>();
                         for (String variant : variants) {
                             String[] parts = variant.split(":", 2);
-                            Object obj = LookupValueFactory.createLookupValueWithHint(parts[0], IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/logo.png"), parts[1]);
-                            lookupItems.add(new LookupItem<Object>(obj, variant));
+                            LookupElementBuilder lookupElement = LookupElementBuilder.create(variant, parts[0]);
+                            lookupElement = lookupElement.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/logo.png"));
+                            lookupElement = lookupElement.setTypeText(parts[1]);
+                            lookupItems.add(lookupElement);
                         }
-                        LookupItem[] items = new LookupItem[lookupItems.size()];
+                        LookupElement[] items = new LookupElement[lookupItems.size()];
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
-                        lookupManager.showLookup(editor, items, new LookupItemPreferencePolicyImpl(editor, offset1, offset2, currentPsiFile));
+                        lookupManager.showLookup(editor, items, prefix, new LookupArranger() {
+                            @Override
+                            public Comparable getRelevance(LookupElement lookupElement) {
+                                return lookupElement.getLookupString();
+                            }
+
+                            @Override
+                            public void sortItems(List<LookupElement> lookupElements) {
+
+                            }
+
+                            @Override
+                            public void itemSelected(LookupElement lookupElement, Lookup lookup) {
+                                String lookupString = lookupElement.getLookupString();
+                                executeSnippetInsert(editor, offset1, offset3 - prefix.length() + lookupString.length(), currentPsiFile, lookupString.split(":")[0]);
+                            }
+                        });
                     }
                 }
             }
@@ -170,50 +185,4 @@ public class InsertSnippetFragmentAction extends EditorAction {
         return false;
     }
 
-    /**
-     * lookup item preference policy
-     */
-    private static class LookupItemPreferencePolicyImpl implements LookupItemPreferencePolicy {
-        private Editor editor;
-        private int offset1;
-        private int offset2;
-        private PsiFile psiFile;
-
-        /**
-         * constructure method
-         *
-         * @param editor  current editor
-         * @param offset1 offset1
-         * @param offset2 offset2
-         * @param psiFile psi file
-         */
-        public LookupItemPreferencePolicyImpl(Editor editor, int offset1, int offset2, PsiFile psiFile) {
-            this.editor = editor;
-            this.offset1 = offset1;
-            this.offset2 = offset2;
-            this.psiFile = psiFile;
-        }
-
-        /**
-         * execute snippet insert
-         *
-         * @param lookupElement lookup element
-         * @param lookup        lookup object
-         */
-        public void itemSelected(LookupElement lookupElement, Lookup lookup) {
-            String lookupString = lookupElement.getLookupString();
-            executeSnippetInsert(editor, offset1, offset2 + lookupString.length(), psiFile, lookupString.split(":")[0]);
-        }
-
-        /**
-         * item compare
-         *
-         * @param element1 element1
-         * @param element2 element2
-         * @return result
-         */
-        public int compare(LookupElement element1, LookupElement element2) {
-            return element1.getLookupString().compareTo(element2.getLookupString());
-        }
-    }
 }
