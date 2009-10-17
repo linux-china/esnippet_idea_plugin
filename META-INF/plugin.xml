@@ -63,7 +63,7 @@
     <actions>
         <action id="InsertSnippetFragmentAction"
                 class="org.mvnsearch.snippet.plugin.actions.InsertSnippetFragmentAction"
-                text="Insert snippet fragment" description="insert snipet fragment in editor"
+                text="Insert snippet fragment" description="insert snippet fragment in editor"
                 icon="/org/mvnsearch/snippet/plugin/icons/insert_snippet.png">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt SLASH"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
