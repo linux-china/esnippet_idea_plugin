@@ -88,13 +88,14 @@ public class InsertSnippetFragmentAction extends EditorAction {
                     final int offset3 = offset2;
                     boolean result = executeSnippetInsert(editor, offset1, offset2, currentPsiFile, mnemonic);
                     if (!result) { //snippet not found
-                        List<String> variants = snippetService.findMnemonicListWithName(prefix);
+                        List<String> variants = snippetService.findMnemonicListWithNameAndIcon(prefix);
                         List<LookupElement> lookupItems = new ArrayList<LookupElement>();
                         for (String variant : variants) {
-                            String[] parts = variant.split(":", 2);
-                            LookupElementBuilder lookupElement = LookupElementBuilder.create(variant, parts[0]);
-                            lookupElement = lookupElement.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/logo.png"));
-                            lookupElement = lookupElement.setTypeText(parts[1]);
+                            String[] parts = variant.split(":", 3);
+                            String lookupString = parts[1]+":"+parts[2];
+                            LookupElementBuilder lookupElement = LookupElementBuilder.create(lookupString, parts[1]);
+                            lookupElement = lookupElement.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/category/"+parts[0]));
+                            lookupElement = lookupElement.setTypeText(parts[2]);
                             lookupItems.add(lookupElement);
                         }
                         LookupElement[] items = new LookupElement[lookupItems.size()];
@@ -127,22 +128,21 @@ public class InsertSnippetFragmentAction extends EditorAction {
      * add macro support
      *
      * @param psiFile psi file
-     * @param editor  editor
-     * @param rawCode rawcode
+     * @param rawCode raw code
      * @return new code
      */
-    private static String addMacroSupport(PsiFile psiFile, Editor editor, String rawCode) {
+    private static String addMacroSupport(PsiFile psiFile, String rawCode) {
         String newCode = rawCode;
         VirtualFile virtualFile = psiFile.getVirtualFile();
         if (virtualFile != null) {
             String fileName = virtualFile.getName();
-            newCode = newCode.replace("${FILE_NAME}", fileName);
+            newCode = newCode.replace("${file_name}", fileName);
             if (!SnippetSearchAgentsFactory.RubyMinePlugin) {
                 PsiDirectory psiDirectory = psiFile.getParent();
                 if (psiDirectory != null) {
                     PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
                     if (psiPackage != null && psiPackage.getName() != null) {
-                        newCode = newCode.replace("${PACKAGE_NAME}", psiPackage.getName());
+                        newCode = newCode.replace("${package}", psiPackage.getName());
                     }
                 }
             }
@@ -174,7 +174,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
         SnippetService snippetService = SnippetAppComponent.getInstance().getSnippetService();
         String rawCode = snippetService.renderTemplate(mnemonic, null, null, SnippetAppComponent.getInstance().userName);
         if (StringUtil.isNotEmpty(rawCode)) {     //found and replace
-            final String code = addMacroSupport(psiFile, editor, rawCode);
+            final String code = addMacroSupport(psiFile, rawCode);
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 public void run() {
                     editor.getDocument().replaceString(offset1, offset2, code);
