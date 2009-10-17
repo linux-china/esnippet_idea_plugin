@@ -17,10 +17,11 @@
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
     </vendor>
     <!--<depends>com.intellij.modules.lang</depends>-->
-    <idea-version since-build="9999"/>
+    <idea-version since-build="9677"/>
     <change-notes>
         <![CDATA[
         <ul>Change list in 1.4.0
+            <li>Work on IDEA 9.0 only</li>
             <li>Bug fix for IDEA 9.0</li>
             <li>Icon support for popup items</li>
         </ul>
