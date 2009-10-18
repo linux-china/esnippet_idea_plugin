@@ -92,9 +92,9 @@ public class InsertSnippetFragmentAction extends EditorAction {
                         List<LookupElement> lookupItems = new ArrayList<LookupElement>();
                         for (String variant : variants) {
                             String[] parts = variant.split(":", 3);
-                            String lookupString = parts[1]+":"+parts[2];
+                            String lookupString = parts[1] + ":" + parts[2];
                             LookupElementBuilder lookupElement = LookupElementBuilder.create(lookupString, parts[1]);
-                            lookupElement = lookupElement.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/category/"+parts[0]));
+                            lookupElement = lookupElement.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/category/" + parts[0]));
                             lookupElement = lookupElement.setTypeText(parts[2]);
                             lookupItems.add(lookupElement);
                         }
@@ -174,6 +174,8 @@ public class InsertSnippetFragmentAction extends EditorAction {
         SnippetService snippetService = SnippetAppComponent.getInstance().getSnippetService();
         String rawCode = snippetService.renderTemplate(mnemonic, null, null, SnippetAppComponent.getInstance().userName);
         if (StringUtil.isNotEmpty(rawCode)) {     //found and replace
+            //\r is forbidden for Intellij document
+            rawCode = rawCode.replaceAll("\r", "");
             final String code = addMacroSupport(psiFile, rawCode);
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 public void run() {
