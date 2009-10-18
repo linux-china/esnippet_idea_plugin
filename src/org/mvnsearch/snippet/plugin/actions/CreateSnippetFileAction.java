@@ -82,6 +82,8 @@ public class CreateSnippetFileAction extends AnAction {
                             buffer.append("Mnemonic not found!");
                             return;
                         }
+                        //\r is forbidden for Intellij document
+                        content = content.replaceAll("\r","");
                         PsiFile destinationFile = psiDirectory.findFile(fileName);
                         if (destinationFile == null) {
                             destinationFile = psiDirectory.createFile(fileName);
