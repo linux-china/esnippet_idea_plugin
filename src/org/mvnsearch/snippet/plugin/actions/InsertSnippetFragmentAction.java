@@ -33,6 +33,7 @@ import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
 import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -147,6 +148,11 @@ public class InsertSnippetFragmentAction extends EditorAction {
                 }
             }
         }
+        Calendar calendar = Calendar.getInstance();
+        newCode = newCode.replace("${year}", String.valueOf(calendar.get(Calendar.YEAR)));
+        newCode = newCode.replace("${month}", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+        newCode = newCode.replace("${day}", String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+        newCode = newCode.replace("${user}", System.getProperty("user.name"));
         return newCode;
     }
 
