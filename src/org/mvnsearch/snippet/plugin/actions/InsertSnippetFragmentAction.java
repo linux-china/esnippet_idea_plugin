@@ -27,13 +27,16 @@ import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiPackage;
 import org.mvnsearch.snippet.SnippetSearchAgentsFactory;
 import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
 import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -103,12 +106,25 @@ public class InsertSnippetFragmentAction extends EditorAction {
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
                         lookupManager.showLookup(editor, items, prefix, new LookupArranger() {
-                            @Override
                             public Comparable getRelevance(LookupElement lookupElement) {
                                 return lookupElement.getLookupString();
                             }
 
                             @Override
+                            public Classifier<LookupElement> createRelevanceClassifier() {
+                                return ClassifierFactory.sortingListClassifier(getItemComparator());
+                            }
+
+                            @Override
+                            public Comparator<LookupElement> getItemComparator() {
+                                return new Comparator<LookupElement>() {
+                                    @Override
+                                    public int compare(LookupElement o1, LookupElement o2) {
+                                        return o1.getLookupString().compareTo(o2.getLookupString());
+                                    }
+                                };
+                            }
+
                             public void sortItems(List<LookupElement> lookupElements) {
 
                             }
@@ -148,11 +164,6 @@ public class InsertSnippetFragmentAction extends EditorAction {
                 }
             }
         }
-        Calendar calendar = Calendar.getInstance();
-        newCode = newCode.replace("${year}", String.valueOf(calendar.get(Calendar.YEAR)));
-        newCode = newCode.replace("${month}", String.valueOf(calendar.get(Calendar.MONTH) + 1));
-        newCode = newCode.replace("${day}", String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
-        newCode = newCode.replace("${user}", System.getProperty("user.name"));
         return newCode;
     }
 
@@ -191,6 +202,7 @@ public class InsertSnippetFragmentAction extends EditorAction {
             return true;
         }
         return false;
+
     }
 
 }
