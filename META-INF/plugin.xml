@@ -12,7 +12,7 @@
           <li>Snippet Editing</li>
       </ul>
     ]]></description>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
     </vendor>
@@ -20,7 +20,7 @@
     <idea-version since-build="103.72"/>
     <change-notes>
         <![CDATA[
-        <ul>Change list in 1.4.1
+        <ul>Change list in 1.4.2
             <li>Compile for IDEA 10.5</li>
         </ul>
         <ul>Change list in 1.4.0
