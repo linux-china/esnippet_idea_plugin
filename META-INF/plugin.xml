@@ -12,14 +12,17 @@
           <li>Snippet Editing</li>
       </ul>
     ]]></description>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <vendor email="linux_china@hotmail.com" url="http://snippet.mvnsearch.org"
             logo="/org/mvnsearch/snippet/plugin/icons/logo.png">linux_china
     </vendor>
     <!--<depends>com.intellij.modules.lang</depends>-->
-    <idea-version since-build="9677"/>
+    <idea-version since-build="103.72"/>
     <change-notes>
         <![CDATA[
+        <ul>Change list in 1.4.1
+            <li>Compile for IDEA 10.5</li>
+        </ul>
         <ul>Change list in 1.4.0
             <li>Work on IDEA 9.0 only</li>
             <li>Bug fix for IDEA 9.0</li>
