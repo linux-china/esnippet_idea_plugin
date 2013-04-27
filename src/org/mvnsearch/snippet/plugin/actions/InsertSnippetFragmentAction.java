@@ -36,7 +36,6 @@ import org.mvnsearch.snippet.impl.mvnsearch.SnippetService;
 import org.mvnsearch.snippet.plugin.SnippetAppComponent;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -98,43 +97,26 @@ public class InsertSnippetFragmentAction extends EditorAction {
                             String[] parts = variant.split(":", 3);
                             String lookupString = parts[1] + ":" + parts[2];
                             LookupElementBuilder lookupElement = LookupElementBuilder.create(lookupString, parts[1]);
-                            lookupElement = lookupElement.setIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/category/" + parts[0]));
-                            lookupElement = lookupElement.setTypeText(parts[2]);
+                            lookupElement = lookupElement.withIcon(IconLoader.findIcon("/org/mvnsearch/snippet/plugin/icons/category/" + parts[0]));
+                            lookupElement = lookupElement.withTypeText(parts[2]);
                             lookupItems.add(lookupElement);
                         }
                         LookupElement[] items = new LookupElement[lookupItems.size()];
                         items = lookupItems.toArray(items);
                         LookupManager lookupManager = LookupManager.getInstance(editor.getProject());
-                        lookupManager.showLookup(editor, items, prefix, new LookupArranger() {
-                            public Comparable getRelevance(LookupElement lookupElement) {
-                                return lookupElement.getLookupString();
-                            }
-
-                            @Override
-                            public Classifier<LookupElement> createRelevanceClassifier() {
-                                return ClassifierFactory.sortingListClassifier(getItemComparator());
-                            }
-
-                            @Override
-                            public Comparator<LookupElement> getItemComparator() {
-                                return new Comparator<LookupElement>() {
-                                    @Override
-                                    public int compare(LookupElement o1, LookupElement o2) {
-                                        return o1.getLookupString().compareTo(o2.getLookupString());
+                        LookupEx lookupEx = lookupManager.showLookup(editor, items, prefix);
+                        if (lookupEx != null) {
+                            lookupEx.addLookupListener(new LookupAdapter() {
+                                public void itemSelected(LookupEvent lookupEvent) {
+                                    super.itemSelected(lookupEvent);
+                                    if (lookupEvent != null && lookupEvent.getItem() != null) {
+                                        @SuppressWarnings("ConstantConditions")
+                                        String lookupString = lookupEvent.getItem().getLookupString();
+                                        executeSnippetInsert(editor, offset1, offset3 - prefix.length() + lookupString.length(), currentPsiFile, lookupString.split(":")[0]);
                                     }
-                                };
-                            }
-
-                            public void sortItems(List<LookupElement> lookupElements) {
-
-                            }
-
-                            @Override
-                            public void itemSelected(LookupElement lookupElement, Lookup lookup) {
-                                String lookupString = lookupElement.getLookupString();
-                                executeSnippetInsert(editor, offset1, offset3 - prefix.length() + lookupString.length(), currentPsiFile, lookupString.split(":")[0]);
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 }
             }
