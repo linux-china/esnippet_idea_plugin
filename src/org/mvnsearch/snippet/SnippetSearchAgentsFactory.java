@@ -19,7 +19,6 @@ package org.mvnsearch.snippet;
 
 import com.intellij.openapi.ui.Messages;
 import org.mvnsearch.snippet.impl.mvnsearch.MvnSnippetSearchAgent;
-import org.mvnsearch.snippet.impl.regex.RegexlibSearchAgent;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -58,8 +57,6 @@ public class SnippetSearchAgentsFactory {
             if (RubyMinePlugin) {
                 MvnSnippetSearchAgent.serviceUrl = "http://snippet.mvnsearch.org/remoting/rubySnippetService";
             }
-            RegexlibSearchAgent regexAgent = new RegexlibSearchAgent();
-            searchAgents.put(regexAgent.getId(), regexAgent);
         } catch (Exception ex) {
             Messages.showErrorDialog(ex.getMessage(), "Failed to create search agents");
         }
