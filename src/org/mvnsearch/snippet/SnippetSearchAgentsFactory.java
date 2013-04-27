@@ -18,9 +18,6 @@
 package org.mvnsearch.snippet;
 
 import com.intellij.openapi.ui.Messages;
-import org.mvnsearch.snippet.impl.dzone.DzoneSnippetSearchAgent;
-import org.mvnsearch.snippet.impl.googlecode.GoogleJavaCodeSearchAgent;
-import org.mvnsearch.snippet.impl.jdaa.JDAASnippetSearchAgent;
 import org.mvnsearch.snippet.impl.mvnsearch.MvnSnippetSearchAgent;
 import org.mvnsearch.snippet.impl.regex.RegexlibSearchAgent;
 
@@ -56,12 +53,6 @@ public class SnippetSearchAgentsFactory {
     private SnippetSearchAgentsFactory() {
         searchAgents = new HashMap<String, SnippetSearchAgent>();
         try {
-            if (!RubyMinePlugin) {
-                JDAASnippetSearchAgent jdaSnippetSearchAgent = new JDAASnippetSearchAgent();
-                searchAgents.put(jdaSnippetSearchAgent.getId(), jdaSnippetSearchAgent);
-                GoogleJavaCodeSearchAgent googleJavaAgent = new GoogleJavaCodeSearchAgent();
-                searchAgents.put(googleJavaAgent.getId(), googleJavaAgent);
-            }
             MvnSnippetSearchAgent mvnAgent = new MvnSnippetSearchAgent();
             searchAgents.put(mvnAgent.getId(), mvnAgent);
             if (RubyMinePlugin) {
@@ -69,11 +60,6 @@ public class SnippetSearchAgentsFactory {
             }
             RegexlibSearchAgent regexAgent = new RegexlibSearchAgent();
             searchAgents.put(regexAgent.getId(), regexAgent);
-            DzoneSnippetSearchAgent dzoneAgent = new DzoneSnippetSearchAgent();
-            searchAgents.put(dzoneAgent.getId(), dzoneAgent);
-            if(RubyMinePlugin) {
-                dzoneAgent.setDefaultTag("ruby");
-            }
         } catch (Exception ex) {
             Messages.showErrorDialog(ex.getMessage(), "Failed to create search agents");
         }
